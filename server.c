@@ -77,7 +77,6 @@ void handle_request(char *buffer, int client_socket)
   Request *request;
 
   request = malloc(sizeof(Request));
-
 }
 
 int main(int argc, char *argv[])
