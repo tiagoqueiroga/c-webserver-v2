@@ -1,4 +1,5 @@
 #include "includes/server.h"
+#include "includes/request.h"
 
 /*
   TODO:
@@ -24,6 +25,14 @@ int create_socket(const char *port)
   server_addr.sin_addr.s_addr = inet_addr(LOCALHOST);
 
   struct sockaddr *bind_addr = (struct sockaddr *)&server_addr;
+
+  // add socket option to reuse the address
+  int opt = 1;
+  if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+  {
+    perror("setsockopt failed");
+    exit(EXIT_FAILURE);
+  }
 
   if (bind(sockfd, bind_addr, sizeof(server_addr)) == -1)
   {
@@ -72,11 +81,14 @@ char *open_html_file(const char *path)
 
 void handle_request(char *buffer, int client_socket)
 {
-  printf("Handling request: %s \n", buffer);
+    Request *r;
 
-  Request *request;
+    r = create_request();
 
-  request = malloc(sizeof(Request));
+    parse_request(r, buffer, client_socket);
+
+    dump_request(r);
+
 }
 
 int main(int argc, char *argv[])
@@ -108,8 +120,8 @@ int main(int argc, char *argv[])
 
     if (recv_len > 0)
     {
-      printf("Server received %ld bytes\n", recv_len);
-      printf("%s\n", buffer);
+      //printf("Server received %ld bytes\n", recv_len);
+      //printf("%s\n", buffer);
 
       handle_request(buffer, client_fd);
 

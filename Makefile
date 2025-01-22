@@ -1,9 +1,13 @@
-CFLAGS=-Wall -Wextra -std=c11 -pedantic 
+CFLAGS = -Wall -Wextra -std=c11 -pedantic
+OUTPUT_DIR = build
 
-all: server
+all: $(OUTPUT_DIR) server
 
-server: server.c
-	$(CC) $(CFLAGS) -o build/server server.c
-	
+$(OUTPUT_DIR):
+	mkdir -p $(OUTPUT_DIR)
+
+server: server.c request.c | $(OUTPUT_DIR)
+	$(CC) $(CFLAGS) -o $(OUTPUT_DIR)/server server.c request.c
+
 clean:
-	rm -f build/*
+	rm -f $(OUTPUT_DIR)/*

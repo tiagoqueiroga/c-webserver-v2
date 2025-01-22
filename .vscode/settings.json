@@ -5,6 +5,9 @@
         "*.dbclient-js": "javascript",
         "cstdlib": "c",
         "socket.h": "c",
-        "in.h": "c"
+        "in.h": "c",
+        "request.h": "c",
+        "server.h": "c",
+        "string.h": "c"
     }
 }
