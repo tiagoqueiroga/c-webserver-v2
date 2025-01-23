@@ -11,11 +11,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "globals.h"
+#include "request.h"
+
 #define LOCALHOST "127.0.0.1"
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 5
 
-const char *initial_line = "HTTP/1.0 200 OK\r\n\r\n";
 const char *response = "";
 const char *html_public_folder = "html";
 

@@ -1,5 +1,5 @@
 #include "includes/request.h"
-
+#include "includes/html.h"
 
 void dump_request(Request *request)
 {
@@ -14,7 +14,6 @@ void dump_request(Request *request)
     printf("\tAccept-Encoding: %s\n", request->accept_encoding);
     printf("\tClient Socket: %d\n", request->client_socket);
 }
-
 
 Request *create_request()
 {
@@ -42,9 +41,32 @@ Request *parse_request(Request *request, char *buffer, int client_socket)
            request->accept,
            request->accept_language,
            request->accept_encoding);
-    
+
     request->client_socket = client_socket;
 
     return request;
 }
 
+void handle_get_request(Request *request)
+{
+    char *html = "";
+
+    if(strcmp(request->path, "/") == 0)
+    {
+        html = open_html_file("index.html");
+    }else{
+        html = open_html_file(request->path);
+    }
+
+
+    if(html == NULL)
+    {
+        send(request->client_socket, "HTTP/1.0 404 Not Found\r\n\r\n", 26, 0);
+        send(request->client_socket, "404 Not Found", 13, 0);
+        return;
+    }
+
+    send(request->client_socket, OK_STATUS_RESPONSE, strlen(OK_STATUS_RESPONSE), 0);
+    send(request->client_socket, html, strlen(html), 0);
+
+}

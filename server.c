@@ -1,11 +1,11 @@
 #include "includes/server.h"
 #include "includes/request.h"
+#include "includes/globals.h"
 
 /*
   TODO:
     1 - Create a simple way to read the static html file and handle the response with it
     2 - Parse the request to a struct like(Request)
-    3 - Handle the request with the struct
 */
 
 int create_socket(const char *port)
@@ -51,45 +51,24 @@ int create_socket(const char *port)
   return sockfd;
 }
 
-char *open_html_file(const char *path)
-{
-
-  char location[256];
-  char file_buffer[BUFFER_SIZE];
-
-  char *file_text = malloc(BUFFER_SIZE + 1);
-
-  snprintf(location, sizeof(location), "%s/%s", html_public_folder, path);
-
-  FILE *file = fopen(location, "r");
-
-  if (file == NULL)
-  {
-    perror("failed to open file");
-    exit(EXIT_FAILURE);
-  }
-
-  while (read(fileno(file), file_buffer, BUFFER_SIZE) > 0)
-  {
-    strcat(file_text, file_buffer);
-  }
-
-  fclose(file);
-
-  return file_text;
-}
-
 void handle_request(char *buffer, int client_socket)
 {
-    Request *r;
+  Request *r;
 
-    r = create_request();
+  r = create_request();
 
-    parse_request(r, buffer, client_socket);
+  parse_request(r, buffer, client_socket);
 
+  if(strcmp(r->method,"GET") == 0){
+    handle_get_request(r);
+  }
+
+  #ifdef DEBUG
     dump_request(r);
+  #endif
 
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -104,7 +83,12 @@ int main(int argc, char *argv[])
 
   char *port = argv[1];
 
+/* Init global data on the heap */
+  init_data();
+
   server_fd = create_socket(port);
+
+  printf("Data initialized %ld \n ", data->htmls->length);
 
   for (;;)
   {
@@ -119,21 +103,14 @@ int main(int argc, char *argv[])
     size_t recv_len = recv(client_fd, buffer, BUFFER_SIZE, 0);
 
     if (recv_len > 0)
-    {
-      //printf("Server received %ld bytes\n", recv_len);
-      //printf("%s\n", buffer);
-
+    {      
       handle_request(buffer, client_fd);
-
-      char *html = open_html_file("index.html");
-
-      // can you explain why I send the initial line and the html separately?
-      send(client_fd, initial_line, strlen(initial_line), 0);
-      send(client_fd, html, strlen(html), 0);
     }
 
     close(client_fd);
   }
+
+  free_data();
 
   return EXIT_SUCCESS;
 }
