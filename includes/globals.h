@@ -6,17 +6,18 @@
 
 #define MAX_HEAP_REQUESTS 256
 #define MAX_HTML_FILES 256
+#define MAX_HTML_FILE_SIZE 1024
 
 typedef struct
 {
     char name[256];
-    char *file_text;
+    char *file_text[MAX_HTML_FILE_SIZE];
     size_t file_size;
 } HtmlFile;
 
 typedef struct
 {
-    HtmlFile **files;
+    HtmlFile *files[MAX_HTML_FILES];
     size_t length;
 } HtmlFileArray;
 

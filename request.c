@@ -58,13 +58,13 @@ void handle_get_request(Request *request)
         html = open_html_file(request->path);
     }
 
-
     if(html == NULL)
     {
         send(request->client_socket, "HTTP/1.0 404 Not Found\r\n\r\n", 26, 0);
         send(request->client_socket, "404 Not Found", 13, 0);
         return;
     }
+
 
     send(request->client_socket, OK_STATUS_RESPONSE, strlen(OK_STATUS_RESPONSE), 0);
     send(request->client_socket, html, strlen(html), 0);

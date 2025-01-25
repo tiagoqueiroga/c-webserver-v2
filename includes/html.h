@@ -21,4 +21,6 @@ int is_file_cached(const char *filename);
 
 int cache_file(const char *filename, const char *file_text);
 
+HtmlFile *get_html_file(const char *filename);
+
 #endif

@@ -32,8 +32,13 @@ char *open_html_file(const char *path)
 
     if (is_file_cached(path) == 1)
     {
-        // TODO: Read from cache
-        printf("File is already cached\n");
+        HtmlFile *cached = get_html_file(path);
+
+        #ifdef DEBUG
+            printf("File %s is already cached\n", path);
+        #endif
+
+        return *cached->file_text;
     }
 
     if (file_text == NULL)
@@ -68,17 +73,18 @@ char *open_html_file(const char *path)
 
 int is_file_cached(const char *filename)
 {
-
     char *filename_lowercase = strcopy(filename);
-
-    printf("Filename: %s\n", filename_lowercase);
-
+    
     for (size_t index = 0; index < data->htmls->length; index++)
     {
-        if (strcmp(data->htmls->files[index]->name, filename_lowercase) == 0)
+        
+        HtmlFile *cached = data->htmls->files[index];
+
+        if (strcmp(cached->name, filename_lowercase) == 0)
         {
             return 1;
         }
+      
     }
 
     return 0;
@@ -95,21 +101,30 @@ int cache_file(const char *filename, const char *file_text)
         return -1;
     }
 
-    data->htmls = malloc(sizeof(HtmlFileArray));
-
-    if (data->htmls == NULL)
-    {
-        perror("failed to reallocate memory for html files");
-        return -1;
-    }
-
-    /*  
     strncpy(html_file->name, filename, strlen(filename));
-    strncpy(html_file->file_text, file_text, strlen(file_text));
+    *html_file->file_text = file_text;
 
     data->htmls->files[data->htmls->length] = html_file;
+
     data->htmls->length++;
-    */
-   
+
     return 0;
+}
+
+HtmlFile *get_html_file(const char *filename){
+    char *filename_lowercase = strcopy(filename);
+    
+    for (size_t index = 0; index < data->htmls->length; index++)
+    {
+        
+        HtmlFile *cached = data->htmls->files[index];
+
+        if (strcmp(cached->name, filename_lowercase) == 0)
+        {
+            return cached;
+        }
+      
+    }
+
+    return NULL;
 }

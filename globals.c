@@ -25,6 +25,17 @@ void init_data(void)
         exit(EXIT_FAILURE);
     }
 
+    for(size_t i = 0; i < MAX_HTML_FILES; i++)
+    {
+        data->htmls->files[i] = malloc(sizeof(HtmlFile));
+
+        if(data->htmls->files[i] == NULL)
+        {
+            perror("failed to allocate memory for html file");
+            exit(EXIT_FAILURE);
+        }
+    }
+
 }
 
 void free_data(void)
@@ -36,11 +47,11 @@ void free_data(void)
 
     for (size_t i = 0; i < data->htmls->length; i++)
     {
-        free(data->htmls->files[i]->file_text);
-        free(data->htmls->files[i]);
+        //free(data->htmls->files[i]->file_text);
+        //free(data->htmls->files[i]);
     }
 
-    free(data->htmls->files);
-    free(data->htmls);
-    free(data);
+    //free(data->htmls->files);
+    //free(data->htmls);
+    //free(data);
 }
