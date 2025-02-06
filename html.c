@@ -34,6 +34,7 @@ char *open_html_file(const char *path)
         return NULL;
     }
 
+    /*
     if (is_file_cached(path) == 1)
     {
         HtmlFile *cached = get_html_file(path);
@@ -50,6 +51,7 @@ char *open_html_file(const char *path)
         perror("failed to allocate memory for file text");
         exit(EXIT_FAILURE);
     }
+    */
 
     FILE *file = fopen(location, "r");
 
