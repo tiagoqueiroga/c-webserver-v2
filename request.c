@@ -53,7 +53,7 @@ void handle_get_request(Request *request)
 
     if(strcmp(request->path, "/") == 0)
     {
-        html = open_html_file("index.html");
+        html = open_html_file("index");
     }else{
         html = open_html_file(request->path);
     }

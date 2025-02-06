@@ -23,10 +23,14 @@ char *open_html_file(const char *path)
         exit(EXIT_FAILURE);
     }
 
-    snprintf(location, sizeof(location), "%s/%s", HTML_PUBLIC_FOLDER, path);
+    snprintf(location, sizeof(location), "%s/%s.html", HTML_PUBLIC_FOLDER, path);
 
     if (file_exists(location) == 0)
     {
+        #ifdef DEBUG
+                printf("File %s does not exist\n", path);
+        #endif
+
         return NULL;
     }
 

@@ -47,11 +47,11 @@ void free_data(void)
 
     for (size_t i = 0; i < data->htmls->length; i++)
     {
-        //free(data->htmls->files[i]->file_text);
-        //free(data->htmls->files[i]);
+        free(data->htmls->files[i]->file_text);
+        free(data->htmls->files[i]);
     }
 
-    //free(data->htmls->files);
-    //free(data->htmls);
-    //free(data);
+    free(data->htmls->files);
+    free(data->htmls);
+    free(data);
 }

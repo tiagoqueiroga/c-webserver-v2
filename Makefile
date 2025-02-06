@@ -7,6 +7,11 @@ SRC_FILES = $(shell cat MakefileList)
 # Output executable name
 OUTPUT = $(OUTPUT_DIR)/server
 
+# Check if DEBUG is set, and if so, add the -DDEBUG flag to CFLAGS
+ifeq ($(DEBUG), 1)
+    CFLAGS += -g -DDEBUG
+endif
+
 all: $(OUTPUT_DIR) $(OUTPUT)
 
 $(OUTPUT_DIR):
