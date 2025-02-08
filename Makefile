@@ -9,7 +9,7 @@ OUTPUT = $(OUTPUT_DIR)/server
 
 # Check if DEBUG is set, and if so, add the -DDEBUG flag to CFLAGS
 ifeq ($(DEBUG), 1)
-    CFLAGS += -g -DDEBUG
+    CFLAGS += -g -DDEBUG -ggdb
 endif
 
 all: $(OUTPUT_DIR) $(OUTPUT)
